@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Mon profil{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h1 class="mb-3">Mon profil</h1>
+    <form method="post" class="card card-body shadow-sm">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Prénom</label>
+          <input type="text" name="first_name" value="{{ form.first_name.value }}" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Nom</label>
+          <input type="text" name="last_name" value="{{ form.last_name.value }}" class="form-control" />
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" value="{{ form.email.value }}" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Téléphone</label>
+          {{ form.phone }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Adresse</label>
+          {{ form.address }}
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Préférences</label>
+          {{ form.preferences }}
+        </div>
+      </div>
+      <button class="btn btn-primary w-100 mt-3">Enregistrer</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

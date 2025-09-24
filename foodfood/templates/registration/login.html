@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Connexion{% endblock %}
+{% block content %}
+<div class="auth-split">
+  <div class="auth-left d-none d-md-block"></div>
+  <div class="auth-right">
+    <div class="auth-card">
+      <h2 class="text-center mb-4">Bienvenue !</h2>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <input type="text" name="username" class="form-control auth-input" placeholder="E-mail ou nom d'utilisateur" required id="id_username" value="{{ form.username.value|default:'' }}">
+        </div>
+        <div class="mb-2">
+          <input type="password" name="password" class="form-control auth-input" placeholder="Mot de passe" required id="id_password">
+        </div>
+        <div class="d-flex justify-content-end mb-3">
+          <a class="small" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+        </div>
+        <button class="btn btn-brand w-100 mb-3" type="submit">Login</button>
+      </form>
+
+      <div class="d-flex align-items-center mb-3">
+        <hr class="flex-grow-1"> <span class="px-2 text-muted">Ou</span> <hr class="flex-grow-1">
+      </div>
+      <div class="d-grid gap-2">
+        <a class="btn btn-google" href="#" role="button">Continuer avec Google</a>
+        <a class="btn btn-facebook" href="#" role="button">Continuer avec Facebook</a>
+      </div>
+
+      <p class="text-center mt-4 text-muted">Pas de compte ? <a href="/accounts/signup/">Inscrivez-vous</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

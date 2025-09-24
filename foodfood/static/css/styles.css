@@ -1,0 +1,98 @@
+:root {
+  --brand: #ff5a5f;
+}
+
+body {
+  background: #f8f9fb;
+}
+
+.navbar-brand {
+  color: var(--brand) !important;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: transform .15s ease-in-out;
+}
+
+.card:hover { transform: translateY(-3px); }
+
+.btn-primary,
+.btn-success {
+  background-color: var(--brand);
+  border-color: var(--brand);
+}
+
+.btn-outline-primary {
+  color: var(--brand);
+  border-color: var(--brand);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--brand);
+  border-color: var(--brand);
+}
+
+.price-badge {
+  background: #fff4f4;
+  color: var(--brand);
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* Auth split layout */
+.auth-split {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #fff 0%, #fff7f7 100%);
+}
+.auth-left {
+  background: url('/static/images/auth-food.jpg') center/cover no-repeat, #f6a623;
+}
+.auth-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  padding: 28px;
+}
+.auth-input {
+  height: 46px;
+  border-radius: 10px;
+  background: #f1f3f5;
+  border: 1px solid #e6e8eb;
+}
+.btn-brand {
+  background: var(--brand);
+  color: #fff;
+  border-radius: 10px;
+  height: 46px;
+}
+.btn-google {
+  background: #fff;
+  border: 1px solid #e6e8eb;
+  border-radius: 10px;
+  height: 44px;
+}
+.btn-facebook {
+  background: #1877f2;
+  color: #fff;
+  border-radius: 10px;
+  height: 44px;
+}
+
+@media (max-width: 768px) {
+  .auth-split { grid-template-columns: 1fr; }
+  .auth-left { display: none; }
+}
+

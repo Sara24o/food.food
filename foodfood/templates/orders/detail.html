@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Commande #{{ order.id }}{% endblock %}
+{% block content %}
+<h1>Commande #{{ order.id }}</h1>
+<p>Restaurant: {{ order.restaurant.name }}</p>
+<p>Statut: {{ order.status }}</p>
+<p>Adresse de livraison: {{ order.delivery_address }}</p>
+<h3>Articles</h3>
+<ul class="list-group">
+  {% for item in order.items.all %}
+  <li class="list-group-item d-flex justify-content-between">
+    <span>{{ item.quantity }} x {{ item.menu_item.name }}</span>
+    <span>{{ item.price }} €</span>
+  </li>
+  {% endfor %}
+</ul>
+<p class="mt-3 fw-bold">Total: {{ order.total_amount }} €</p>
+{% endblock %}
+
+

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Restaurants{% endblock %}
+{% block content %}
+<h1>Restaurants</h1>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+  <div class="col-md-6">
+    <label class="form-label">Recherche</label>
+    <input type="text" class="form-control" name="q" value="{{ q }}" placeholder="Nom, description...">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Cuisine</label>
+    <select class="form-select" name="cuisine">
+      <option value="">Toutes</option>
+      {% for value,label in cuisines %}
+        <option value="{{ value }}" {% if cuisine == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2 form-check mt-4">
+    <input class="form-check-input" type="checkbox" name="open" value="1" id="openNow" {% if open == '1' %}checked{% endif %}>
+    <label class="form-check-label" for="openNow">Ouvert maintenant</label>
+  </div>
+  <div class="col-md-1">
+    <button class="btn btn-primary w-100">Filtrer</button>
+  </div>
+</form>
+
+<div class="row">
+  {% for r in restaurants %}
+  <div class="col-md-4">
+    <div class="card mb-3">
+      {% if r.image %}
+      <img src="{{ r.image.url }}" class="card-img-top" alt="{{ r.name }}">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title d-flex justify-content-between align-items-center">
+          <span>{{ r.name }}</span>
+          {% if r.is_open %}<span class="badge text-bg-success">Ouvert</span>{% else %}<span class="badge text-bg-secondary">Fermé</span>{% endif %}
+        </h5>
+        <div class="mb-1 text-muted small">Cuisine: {{ r.get_cuisine_type_display }} · Livraison: {{ r.delivery_time }} min · Frais: {{ r.delivery_fee }} €</div>
+        <p class="card-text">{{ r.description|truncatewords:20 }}</p>
+        <a href="{% url 'restaurant-detail' slug=r.slug %}" class="btn btn-primary">Voir</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>Aucun restaurant disponible.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+
+
