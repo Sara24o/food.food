@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}UPI Payment - Order #{{ order.id }}{% endblock %}
+{% block content %}
+<h1>UPI Payment</h1>
+<p>Total: ₹ {{ display_amount }}</p>
+{% if error_message %}
+<div class="alert alert-warning">
+  Unable to initialize payment: {{ error_message }}<br>
+  Add your test keys to environment variables <code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code>, then refresh the page.
+  Example: <code>set RAZORPAY_KEY_ID=rzp_test_xxx</code>
+{% endif %}
+
+<button id="rzp-button" class="btn btn-success" {% if not rp_order_id %}disabled{% endif %}>Pay with UPI</button>
+
+<form id="verify-form" method="post" action="{% url 'payment-verify' %}" style="display:none;">
+  {% csrf_token %}
+  <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+  <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+  <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+  <button type="submit">Verify</button>
+  </form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const options = {
+    key: "{{ razorpay_key }}",
+    amount: {{ amount }},
+    currency: "INR",
+    name: "FoodFood",
+    description: "Order #{{ order.id }}",
+    order_id: "{{ rp_order_id }}",
+    method: {
+      upi: true,
+      netbanking: false,
+      card: false,
+      wallet: false,
+    },
+    handler: function (response){
+      document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+      document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+      document.getElementById('razorpay_signature').value = response.razorpay_signature;
+      document.getElementById('verify-form').submit();
+    },
+    theme: { color: '#ff5a5f' }
+  };
+  const rzpBtn = document.getElementById('rzp-button');
+  if (rzpBtn && "{{ rp_order_id }}") {
+    const rzp = new Razorpay(options);
+    rzpBtn.onclick = function(e){
+      rzp.open();
+      e.preventDefault();
+    }
+  }
+</script>
+{% endblock %}
+
+

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Commande #{{ order.id }}{% endblock %}
+{% block title %}Order #{{ order.id }}{% endblock %}
 {% block content %}
-<h1>Commande #{{ order.id }}</h1>
+<h1>Order #{{ order.id }}</h1>
 <p>Restaurant: {{ order.restaurant.name }}</p>
-<p>Statut: {{ order.status }}</p>
-<p>Adresse de livraison: {{ order.delivery_address }}</p>
-<h3>Articles</h3>
+<p>Status: {{ order.status }}</p>
+<p>Delivery Address: {{ order.delivery_address }}</p>
+<h3>Items</h3>
 <ul class="list-group">
   {% for item in order.items.all %}
   <li class="list-group-item d-flex justify-content-between">
@@ -15,6 +15,15 @@
   {% endfor %}
 </ul>
 <p class="mt-3 fw-bold">Total: {{ order.total_amount }} €</p>
+
+{% if order.status == 'pending' %}
+<div class="mt-4">
+  <a href="{% url 'upi-checkout' order_id=order.id %}" class="btn btn-success btn-lg">Pay Now (UPI)</a>
+  <a href="{% url 'cod-confirm' order_id=order.id %}" class="btn btn-warning btn-lg">Pay on Delivery (COD)</a>
+  <a href="{% url 'order-history' %}" class="btn btn-outline-secondary">My Orders</a>
+  <a href="/restaurants/" class="btn btn-link">Continue Shopping</a>
+</div>
+{% endif %}
 {% endblock %}
 
 

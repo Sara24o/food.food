@@ -4,6 +4,11 @@ from django.db.models import Q
 from .models import Restaurant, MenuItem
 
 
+def splash_view(request):
+    """Splash screen for first-time visitors"""
+    return render(request, 'splash.html')
+
+
 class RestaurantListView(ListView):
     model = Restaurant
     template_name = 'restaurants/list.html'
@@ -16,7 +21,14 @@ class RestaurantListView(ListView):
         cuisine = self.request.GET.get('cuisine')
         is_open = self.request.GET.get('open')
         if q:
-            qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
+            # Search across restaurants and their menu items
+            qs = qs.filter(
+                Q(name__icontains=q)
+                | Q(description__icontains=q)
+                | Q(menu_items__name__icontains=q)
+                | Q(menu_items__description__icontains=q)
+                | Q(menu_items__category__icontains=q)
+            ).distinct()
         if cuisine:
             qs = qs.filter(cuisine_type=cuisine)
         if is_open == '1':

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}Panier{% endblock %}
+{% block title %}Cart{% endblock %}
 {% block content %}
-<h1>Panier</h1>
+<h1>Cart</h1>
 {% if restaurant %}
 <p>Restaurant: {{ restaurant.name }}</p>
 {% endif %}
 <table class="table">
   <thead>
-    <tr><th>Article</th><th>Qté</th><th>Total</th><th></th></tr>
+    <tr><th>Item</th><th>Qty</th><th>Total</th><th></th></tr>
   </thead>
   <tbody>
     {% for row in cart_items %}
@@ -21,20 +21,20 @@
       </td>
     </tr>
     {% empty %}
-    <tr><td colspan="4">Votre panier est vide.</td></tr>
+    <tr><td colspan="4">Your cart is empty.</td></tr>
     {% endfor %}
   </tbody>
 </table>
 <div class="d-flex justify-content-end gap-3">
-  <span>Sous-total: <strong>{{ subtotal }} €</strong></span>
-  <span>Livraison: <strong>{{ delivery_fee }} €</strong></span>
+  <span>Subtotal: <strong>{{ subtotal }} €</strong></span>
+  <span>Delivery: <strong>{{ delivery_fee }} €</strong></span>
   <span>Total: <strong>{{ total }} €</strong></span>
 </div>
 <form method="post" action="/orders/checkout/" class="mt-3">
   {% csrf_token %}
-  <button class="btn btn-primary" {% if not cart_items %}disabled{% endif %}>Valider la commande</button>
-  <a href="/restaurants/" class="btn btn-link">Continuer vos achats</a>
-  <a href="/orders/history/" class="btn btn-outline-secondary">Mes commandes</a>
+  <button class="btn btn-primary" {% if not cart_items %}disabled{% endif %}>Checkout</button>
+  <a href="/" class="btn btn-link">Continue Shopping</a>
+  <a href="/orders/history/" class="btn btn-outline-secondary">My Orders</a>
 </form>
 {% endblock %}
 

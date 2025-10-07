@@ -1,34 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Connexion{% endblock %}
+{% block title %}Sign In{% endblock %}
 {% block content %}
 <div class="auth-split">
-  <div class="auth-left d-none d-md-block"></div>
+  <div class="auth-left d-none d-md-block">
+    <div class="auth-left-content">
+      <h1>Need some<br>Pizza, yo?</h1>
+      <p>C'mon and order from nearby Pizza<br>delivery and pickup restaurants</p>
+      <div class="auth-pagination">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
   <div class="auth-right">
     <div class="auth-card">
-      <h2 class="text-center mb-4">Bienvenue !</h2>
+      <h2 class="text-center mb-4">Welcome!</h2>
       <form method="post" novalidate>
         {% csrf_token %}
-        <div class="mb-3">
-          <input type="text" name="username" class="form-control auth-input" placeholder="E-mail ou nom d'utilisateur" required id="id_username" value="{{ form.username.value|default:'' }}">
+        <div class="mb-4">
+          <input type="text" name="username" class="form-control auth-input" placeholder="Username" required id="id_username" value="{{ form.username.value|default:'' }}">
         </div>
-        <div class="mb-2">
-          <input type="password" name="password" class="form-control auth-input" placeholder="Mot de passe" required id="id_password">
+        <div class="mb-4">
+          <input type="password" name="password" class="form-control auth-input" placeholder="Password" required id="id_password">
         </div>
-        <div class="d-flex justify-content-end mb-3">
-          <a class="small" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+        <div class="d-flex justify-content-end mb-4">
+          <a class="small text-muted" href="{% url 'password_reset' %}">Forgot password?</a>
         </div>
-        <button class="btn btn-brand w-100 mb-3" type="submit">Login</button>
+        <button class="btn btn-brand mb-4" type="submit">Sign In</button>
       </form>
 
-      <div class="d-flex align-items-center mb-3">
-        <hr class="flex-grow-1"> <span class="px-2 text-muted">Ou</span> <hr class="flex-grow-1">
+      <div class="d-flex align-items-center mb-4">
+        <hr class="flex-grow-1"> <span class="px-2 text-muted">Or</span> <hr class="flex-grow-1">
       </div>
       <div class="d-grid gap-2">
-        <a class="btn btn-google" href="#" role="button">Continuer avec Google</a>
-        <a class="btn btn-facebook" href="#" role="button">Continuer avec Facebook</a>
+        <a class="btn btn-google" href="#" role="button">Continue with Google</a>
+        <a class="btn btn-facebook" href="#" role="button">Continue with Facebook</a>
       </div>
 
-      <p class="text-center mt-4 text-muted">Pas de compte ? <a href="/accounts/signup/">Inscrivez-vous</a></p>
+      <p class="text-center mt-4 text-muted">Don't have an account? <a href="/accounts/signup/" class="text-decoration-none">Sign Up</a></p>
     </div>
   </div>
 </div>

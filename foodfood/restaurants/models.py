@@ -2,6 +2,47 @@ from django.db import models
 from django.utils.text import slugify
 from django.db.models import TextChoices
 from accounts.models import Vendor
+from PIL import Image
+
+
+TARGET_IMAGE_SIZE = (800, 600)  # width, height for uniform presentation
+
+
+def _compress_and_fit_image(image_path: str, target_size=TARGET_IMAGE_SIZE) -> None:
+    """Open an image at image_path, convert to RGB, center-crop to cover target_size,
+    and save compressed back to the same path.
+    """
+    try:
+        with Image.open(image_path) as img:
+            # Convert to RGB to avoid issues with PNG/alpha when saving JPEG
+            if img.mode in ("RGBA", "P"):
+                background = Image.new("RGB", img.size, (255, 255, 255))
+                background.paste(img, mask=img.split()[3] if img.mode == "RGBA" else None)
+                img = background
+            else:
+                img = img.convert("RGB")
+
+            target_w, target_h = target_size
+            src_w, src_h = img.size
+
+            # Compute scale to cover the target area
+            scale = max(target_w / src_w, target_h / src_h)
+            new_size = (int(src_w * scale), int(src_h * scale))
+            img = img.resize(new_size, Image.LANCZOS)
+
+            # Center crop
+            left = (img.width - target_w) // 2
+            top = (img.height - target_h) // 2
+            right = left + target_w
+            bottom = top + target_h
+            img = img.crop((left, top, right, bottom))
+
+            # Save compressed
+            img.save(image_path, format="JPEG", quality=85, optimize=True, progressive=True)
+    except Exception:
+        # If anything goes wrong, skip silently to avoid breaking save()
+        # Logging can be added later if needed.
+        pass
 
 
 class Restaurant(models.Model):
@@ -49,6 +90,9 @@ class Restaurant(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+        # Process image after initial save, when file path exists
+        if self.image and getattr(self.image, 'path', None):
+            _compress_and_fit_image(self.image.path, TARGET_IMAGE_SIZE)
 
 
 class MenuItem(models.Model):
@@ -83,5 +127,10 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.restaurant.name}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image and getattr(self.image, 'path', None):
+            _compress_and_fit_image(self.image.path, TARGET_IMAGE_SIZE)
 
 # Create your models here.

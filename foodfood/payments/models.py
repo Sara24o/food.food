@@ -5,9 +5,11 @@ from orders.models import Order
 class Payment(models.Model):
     METHOD_CARD = "card"
     METHOD_PAYPAL = "paypal"
+    METHOD_COD = "cod"
     METHOD_CHOICES = [
         (METHOD_CARD, "Card"),
         (METHOD_PAYPAL, "PayPal"),
+        (METHOD_COD, "Cash on Delivery"),
     ]
 
     STATUS_PENDING = "pending"

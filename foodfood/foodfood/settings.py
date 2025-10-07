@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,6 +66,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins': [
+                'accounts.templatetags.compat_filters',
             ],
         },
     },
@@ -120,6 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -129,5 +134,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Auth redirects
-LOGIN_REDIRECT_URL = ''
-LOGOUT_REDIRECT_URL = ''
+# Use named URLs to avoid NoReverseMatch on empty strings
+LOGIN_REDIRECT_URL = 'restaurant-list'
+LOGOUT_REDIRECT_URL = 'restaurant-list'
+
+# Jazzmin configuration (optional tweaks)
+JAZZMIN_SETTINGS = {
+    "site_title": "FoodFood Admin",
+    "site_header": "FoodFood Administration",
+    "welcome_sign": "Welcome to FoodFood Admin",
+    "site_brand": "FoodFood",
+}
+# Payments: Razorpay test keys (set environment variables in development)
+import os
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_RLtyL9jGuMti9L")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "Uyl1g4FFL0oPzb7AqalzahdQ")

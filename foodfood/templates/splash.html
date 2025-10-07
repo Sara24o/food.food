@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodFood - Bienvenue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff5a5f 0%, #ff8a8e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .splash-container {
+            text-align: center;
+            color: white;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeIn 2s ease-out 0.5s both;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            margin-left: 1rem;
+            font-size: 1rem;
+            animation: fadeIn 2s ease-out 1s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .food-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <div class="food-icon">🍽️</div>
+        <div class="logo">FoodFood</div>
+        <div class="tagline">Découvrez les meilleurs restaurants près de chez vous</div>
+        <div class="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Chargement...</div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user has seen splash before
+        if (localStorage.getItem('splashSeen')) {
+            window.location.href = '/';
+        }
+        
+        // Set splash as seen and redirect after 3 seconds
+        setTimeout(() => {
+            localStorage.setItem('splashSeen', 'true');
+            window.location.href = '/';
+        }, 3000);
+        
+        // Allow manual skip
+        document.addEventListener('click', () => {
+            localStorage.setItem('splashSeen', 'true');
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>
