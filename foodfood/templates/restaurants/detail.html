@@ -6,7 +6,7 @@
   {% if restaurant.is_open %}<span class="badge text-bg-success">Open</span>{% else %}<span class="badge text-bg-secondary">Closed</span>{% endif %}
 </div>
 {% if restaurant.image %}
-<img src="{{ restaurant.image.url }}" class="img-fluid rounded mb-3" alt="{{ restaurant.name }}">
+<img src="{{ restaurant.image.url }}" class="img-fixed-hero rounded mb-3" alt="{{ restaurant.name }}">
 {% endif %}
 <div class="text-muted mb-2">Cuisine: {{ restaurant.get_cuisine_type_display }} · Delivery: {{ restaurant.delivery_time }} min · Fee: {{ restaurant.delivery_fee }} €</div>
 <p>{{ restaurant.description }}</p>

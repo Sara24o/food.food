@@ -16,7 +16,18 @@
   <div class="auth-right">
     <div class="auth-card">
       <h2 class="text-center mb-4">Welcome!</h2>
-      <form method="post" novalidate>
+      
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <form method="post" action="{% url 'login' %}" novalidate>
         {% csrf_token %}
         <div class="mb-4">
           <input type="text" name="username" class="form-control auth-input" placeholder="Username" required id="id_username" value="{{ form.username.value|default:'' }}">

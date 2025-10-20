@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Vendor Orders{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Order Management</h1>
+      <a href="{% url 'vendor-dashboard' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+
+<!-- Order Statistics -->
+<div class="row mt-4">
+  <div class="col-md-3">
+    <div class="card bg-warning text-white">
+      <div class="card-body text-center">
+        <h4>{{ total_orders }}</h4>
+        <p class="mb-0">Total Orders</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-info text-white">
+      <div class="card-body text-center">
+        <h4>{{ pending_orders }}</h4>
+        <p class="mb-0">Pending</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white">
+      <div class="card-body text-center">
+        <h4>{{ completed_orders }}</h4>
+        <p class="mb-0">Completed</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-primary text-white">
+      <div class="card-body text-center">
+        <h4>{{ in_progress_orders }}</h4>
+        <p class="mb-0">In Progress</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Orders Table -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">All Orders</h5>
+      </div>
+      <div class="card-body">
+        {% if orders %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Restaurant</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                <tr>
+                  <td><strong>#{{ order.id }}</strong></td>
+                  <td>{{ order.customer.user.username }}</td>
+                  <td>{{ order.restaurant.name }}</td>
+                  <td>
+                    <span class="badge 
+                      {% if order.status == 'pending' %}bg-warning
+                      {% elif order.status == 'accepted' %}bg-info
+                      {% elif order.status == 'preparing' %}bg-primary
+                      {% elif order.status == 'on_the_way' %}bg-secondary
+                      {% elif order.status == 'delivered' %}bg-success
+                      {% else %}bg-danger{% endif %}">
+                      {{ order.get_status_display }}
+                    </span>
+                  </td>
+                  <td>{{ order.total_amount }} INR</td>
+                  <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      {% if order.status == 'pending' %}
+                        <form method="post" style="display: inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="order_id" value="{{ order.id }}">
+                          <input type="hidden" name="action" value="accept">
+                          <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                        </form>
+                        <form method="post" style="display: inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="order_id" value="{{ order.id }}">
+                          <input type="hidden" name="action" value="cancel">
+                          <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                        </form>
+                      {% elif order.status == 'accepted' %}
+                        <form method="post" style="display: inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="order_id" value="{{ order.id }}">
+                          <input type="hidden" name="action" value="preparing">
+                          <button type="submit" class="btn btn-sm btn-primary">Start Preparing</button>
+                        </form>
+                      {% elif order.status == 'preparing' %}
+                        <form method="post" style="display: inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="order_id" value="{{ order.id }}">
+                          <input type="hidden" name="action" value="ready">
+                          <button type="submit" class="btn btn-sm btn-info">Mark Ready</button>
+                        </form>
+                      {% elif order.status == 'on_the_way' %}
+                        <form method="post" style="display: inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="order_id" value="{{ order.id }}">
+                          <input type="hidden" name="action" value="delivered">
+                          <button type="submit" class="btn btn-sm btn-success">Mark Delivered</button>
+                        </form>
+                      {% endif %}
+                      <a href="/orders/{{ order.id }}/" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No orders yet</h5>
+            <p class="text-muted">Orders will appear here when customers place them</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

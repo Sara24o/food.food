@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qc=bjkg31lc&weau6bjf#&(wgo7=vmhh-xm3s@4vbeku&6#l!e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 
 # Application definition
@@ -128,6 +128,13 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# CSRF trusted origins for local development when accessed via hostname/IP
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://0.0.0.0:8000",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -135,7 +142,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Auth redirects
 # Use named URLs to avoid NoReverseMatch on empty strings
-LOGIN_REDIRECT_URL = 'restaurant-list'
+LOGIN_REDIRECT_URL = 'smart-redirect'
 LOGOUT_REDIRECT_URL = 'restaurant-list'
 
 # Jazzmin configuration (optional tweaks)

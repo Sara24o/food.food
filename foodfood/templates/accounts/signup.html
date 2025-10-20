@@ -35,6 +35,11 @@
         </div>
 
         <div class="mb-4">
+          <input type="text" name="phone" required maxlength="20" class="form-control auth-input {% if form.phone.errors %}is-invalid{% endif %}" id="id_phone" placeholder="Phone" value="{{ form.phone.value|default:'' }}">
+          {% for e in form.phone.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="mb-4">
           <div class="input-group">
             <input type="password" name="password1" required class="form-control auth-input {% if form.password1.errors %}is-invalid{% endif %}" id="id_password1" placeholder="Password">
             <button class="btn btn-outline-secondary" type="button" id="togglePass1">Show</button>
