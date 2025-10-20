@@ -6,6 +6,8 @@ from django.db import transaction
 from .models import Order, OrderItem
 from restaurants.models import MenuItem, Restaurant
 from accounts.models import Customer
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 @method_decorator(login_required, name='dispatch')
@@ -30,6 +32,7 @@ def _get_cart(session):
     return cart
 
 
+@login_required
 def add_to_cart(request, menu_item_id):
     item = get_object_or_404(MenuItem, id=menu_item_id, is_available=True)
     cart = _get_cart(request.session)
@@ -45,6 +48,7 @@ def add_to_cart(request, menu_item_id):
     return redirect('cart-view')
 
 
+@login_required
 def remove_from_cart(request, menu_item_id):
     cart = _get_cart(request.session)
     cart_items = cart.get("items", {})
@@ -93,7 +97,10 @@ def checkout_view(request):
     if not cart["items"]:
         return redirect('cart-view')
     restaurant = get_object_or_404(Restaurant, id=cart["restaurant_id"])
-    customer = get_object_or_404(Customer, user=request.user)
+    customer, _ = Customer.objects.get_or_create(user=request.user)
+    if not customer.phone:
+        messages.warning(request, "Please provide your phone number before checkout.")
+        return redirect('/accounts/profile/')
     order = Order.objects.create(
         customer=customer,
         restaurant=restaurant,

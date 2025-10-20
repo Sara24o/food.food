@@ -10,6 +10,14 @@ body {
   color: var(--brand) !important;
 }
 
+/* Align logout form button with nav links */
+.navbar .nav-item form .nav-link {
+  line-height: 1.5;
+}
+.navbar .nav-item form {
+  margin: 0;
+}
+
 .card {
   border: none;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
@@ -32,6 +40,14 @@ body {
   width: 100%;
   height: 220px;
   object-fit: cover;
+  display: block;
+}
+
+/* Uniform hero/banner images (e.g., restaurant detail header) */
+.img-fixed-hero {
+  width: 100%;
+  height: 320px; /* fixed height for consistent display */
+  object-fit: cover; /* maintain aspect ratio, crop overflow */
   display: block;
 }
 
@@ -73,6 +89,30 @@ body {
   border-radius: 8px;
   padding: 2px 8px;
   font-weight: 600;
+}
+
+/* Profile form adjustments: reduce certain field heights/widths */
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form select,
+.profile-form textarea {
+  min-height: 38px;
+}
+.profile-form input[name="first_name"],
+.profile-form input[name="last_name"],
+.profile-form input[name="email"] {
+  height: 42px;
+}
+.profile-form input[name="phone"] {
+  height: 38px;
+  max-width: 260px; /* reduce width of phone field */
+}
+.profile-form textarea[name="address"] {
+  min-height: 60px; /* reduce address field height */
+  max-width: 400px; /* limit address field width */
+}
+.profile-form textarea[name="preferences"] {
+  min-height: 80px; /* smaller preferences area */
 }
 
 /* Auth split layout */
@@ -194,5 +234,57 @@ body {
 @media (max-width: 768px) {
   .auth-split { grid-template-columns: 1fr; }
   .auth-left { display: none; }
+}
+
+/* Vendor add menu item form enhancements */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.vendor-upload-area {
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-width: 2px !important;
+  border-style: dashed !important;
+}
+
+.vendor-upload-area:hover {
+  background-color: #f8f9fa;
+  border-color: #0d6efd !important;
+}
+
+.vendor-upload-area input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+}
+
+.vendor-upload-placeholder {
+  pointer-events: none;
+}
+
+.vendor-form .form-control:focus,
+.vendor-form .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.vendor-form .card {
+  border-radius: 15px;
+}
+
+.vendor-form .btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.vendor-form .form-check-input:checked {
+  background-color: #667eea;
+  border-color: #667eea;
 }
 

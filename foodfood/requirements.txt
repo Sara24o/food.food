@@ -1,0 +1,4 @@
+Django==5.2.6
+pillow==10.4.0
+razorpay==1.4.2
+django-jazzmin>=2.6,<4

@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.db.models import TextChoices
 from accounts.models import Vendor
 from PIL import Image
+from pathlib import Path
 
 
 TARGET_IMAGE_SIZE = (800, 600)  # width, height for uniform presentation
@@ -37,8 +38,14 @@ def _compress_and_fit_image(image_path: str, target_size=TARGET_IMAGE_SIZE) -> N
             bottom = top + target_h
             img = img.crop((left, top, right, bottom))
 
-            # Save compressed
-            img.save(image_path, format="JPEG", quality=85, optimize=True, progressive=True)
+            # Save compressed using original extension to avoid format mismatch
+            ext = Path(image_path).suffix.lower()
+            save_kwargs = {"optimize": True}
+            if ext in (".jpg", ".jpeg"):
+                save_kwargs.update({"quality": 85, "progressive": True})
+            elif ext == ".png":
+                save_kwargs.update({"compress_level": 6})
+            img.save(image_path, **save_kwargs)
     except Exception:
         # If anything goes wrong, skip silently to avoid breaking save()
         # Logging can be added later if needed.
@@ -88,7 +95,13 @@ class Restaurant(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            base = slugify(self.name) or "restaurant"
+            slug_candidate = base
+            index = 1
+            while Restaurant.objects.filter(slug=slug_candidate).exclude(pk=self.pk).exists():
+                index += 1
+                slug_candidate = f"{base}-{index}"
+            self.slug = slug_candidate
         super().save(*args, **kwargs)
         # Process image after initial save, when file path exists
         if self.image and getattr(self.image, 'path', None):

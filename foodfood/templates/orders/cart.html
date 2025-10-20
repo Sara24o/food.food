@@ -33,7 +33,11 @@
 <form method="post" action="/orders/checkout/" class="mt-3">
   {% csrf_token %}
   <button class="btn btn-primary" {% if not cart_items %}disabled{% endif %}>Checkout</button>
-  <a href="/" class="btn btn-link">Continue Shopping</a>
+  {% if restaurant %}
+    <a href="{% url 'restaurant-menu' restaurant.slug %}" class="btn btn-outline-info">Continue Shopping</a>
+  {% else %}
+    <a href="{% url 'restaurant-list' %}" class="btn btn-outline-info">Continue Shopping</a>
+  {% endif %}
   <a href="/orders/history/" class="btn btn-outline-secondary">My Orders</a>
 </form>
 {% endblock %}

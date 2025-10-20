@@ -2,26 +2,54 @@
 {% block title %}Order #{{ order.id }}{% endblock %}
 {% block content %}
 <h1>Order #{{ order.id }}</h1>
-<p>Restaurant: {{ order.restaurant.name }}</p>
-<p>Status: {{ order.status }}</p>
-<p>Delivery Address: {{ order.delivery_address }}</p>
+<div class="row">
+  <div class="col-md-6">
+    <p><strong>Restaurant:</strong> {{ order.restaurant.name }}</p>
+    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+    <p><strong>Order Date:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
+  </div>
+  <div class="col-md-6">
+    <p><strong>Status:</strong> 
+      <span class="badge 
+        {% if order.status == 'pending' %}bg-warning
+        {% elif order.status == 'accepted' %}bg-info
+        {% elif order.status == 'preparing' %}bg-primary
+        {% elif order.status == 'on_the_way' %}bg-secondary
+        {% elif order.status == 'delivered' %}bg-success
+        {% else %}bg-danger{% endif %} fs-6">
+        {{ order.get_status_display }}
+      </span>
+    </p>
+    {% if order.status == 'on_the_way' %}
+      <p class="text-info"><i class="fas fa-truck"></i> Your order is on the way!</p>
+    {% elif order.status == 'preparing' %}
+      <p class="text-primary"><i class="fas fa-utensils"></i> Your order is being prepared</p>
+    {% elif order.status == 'delivered' %}
+      <p class="text-success"><i class="fas fa-check-circle"></i> Order delivered successfully!</p>
+    {% endif %}
+  </div>
+</div>
 <h3>Items</h3>
 <ul class="list-group">
   {% for item in order.items.all %}
   <li class="list-group-item d-flex justify-content-between">
     <span>{{ item.quantity }} x {{ item.menu_item.name }}</span>
-    <span>{{ item.price }} €</span>
+    <span>{{ item.price }} INR</span>
   </li>
   {% endfor %}
 </ul>
-<p class="mt-3 fw-bold">Total: {{ order.total_amount }} €</p>
+<p class="mt-3 fw-bold">Total: {{ order.total_amount }} INR</p>
 
 {% if order.status == 'pending' %}
 <div class="mt-4">
   <a href="{% url 'upi-checkout' order_id=order.id %}" class="btn btn-success btn-lg">Pay Now (UPI)</a>
   <a href="{% url 'cod-confirm' order_id=order.id %}" class="btn btn-warning btn-lg">Pay on Delivery (COD)</a>
   <a href="{% url 'order-history' %}" class="btn btn-outline-secondary">My Orders</a>
-  <a href="/restaurants/" class="btn btn-link">Continue Shopping</a>
+  {% if restaurant %}
+    <a href="{% url 'restaurant-menu' restaurant.slug %}" class="btn btn-outline-info">Continue Shopping</a>
+  {% else %}
+    <a href="{% url 'restaurant-list' %}" class="btn btn-outline-info">Continue Shopping</a>
+  {% endif %}
 </div>
 {% endif %}
 {% endblock %}

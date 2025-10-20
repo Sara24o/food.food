@@ -1,4 +1,5 @@
 from django import template
+from accounts.models import Vendor
 
 register = template.Library()
 
@@ -20,5 +21,16 @@ def length_is(value, arg):
         return False
 
     return length == expected_length
+
+
+@register.simple_tag
+def is_vendor(user):
+    """Check if user is a vendor"""
+    if not user or not user.is_authenticated:
+        return False
+    try:
+        return Vendor.objects.filter(user=user).exists()
+    except:
+        return False
 
 
