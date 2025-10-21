@@ -4,4 +4,4 @@ __pycache__/
 *.sqlite3
 *.pyc
 venv/
-debug.log
+debug.logdebug.log
