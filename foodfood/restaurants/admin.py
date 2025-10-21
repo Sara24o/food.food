@@ -4,7 +4,7 @@ from .models import Restaurant, MenuItem
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ("name", "vendor", "cuisine_type", "is_open")
+    list_display = ("name", "vendor", "is_open")
     prepopulated_fields = {"slug": ("name",)}
 
 

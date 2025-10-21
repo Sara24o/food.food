@@ -22,12 +22,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Root redirects to restaurant list to avoid slug capture
-    path('', RedirectView.as_view(pattern_name='restaurant-list', permanent=False)),
+    # Root redirects to menu list to show menu items first
+    path('', RedirectView.as_view(pattern_name='menu-list', permanent=False)),
     path('restaurants/', include('restaurants.urls')),
     path('orders/', include('orders.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('payments/', include('payments.urls')),
 ]
 

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% block title %}Menu Items{% endblock %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="h2 mb-3">
+        <i class="fas fa-utensils text-primary me-2"></i>
+        Discover Delicious Food
+      </h1>
+     <!--p class="text-muted">Browse our selection of delicious dishes from top restaurants</p-->
+    </div>
+  </div>
+
+  <!-- Quick Category Filters -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="mb-3">
+            <i class="fas fa-tags text-primary me-2"></i>
+            Quick Filter by Dish Type
+          </h6>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'menu-list' %}" class="btn {% if not category %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+              <i class="fas fa-th-large me-1"></i> All
+            </a>
+            {% for value, label in categories %}
+              <a href="?category={{ value }}{% if q %}&q={{ q }}{% endif %}{% if cuisine %}&cuisine={{ cuisine }}{% endif %}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}" 
+                 class="btn {% if category == value %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                {% if value == 'starter' %}
+                  <i class="fas fa-seedling me-1"></i>
+                {% elif value == 'main' %}
+                  <i class="fas fa-utensils me-1"></i>
+                {% elif value == 'dessert' %}
+                  <i class="fas fa-ice-cream me-1"></i>
+                {% elif value == 'drink' %}
+                  <i class="fas fa-coffee me-1"></i>
+                {% elif value == 'pizza' %}
+                  <i class="fas fa-pizza-slice me-1"></i>
+                {% elif value == 'burger' %}
+                  <i class="fas fa-hamburger me-1"></i>
+                {% elif value == 'sushi' %}
+                  <i class="fas fa-fish me-1"></i>
+                {% elif value == 'pasta' %}
+                  <i class="fas fa-bowl-food me-1"></i>
+                {% elif value == 'salad' %}
+                  <i class="fas fa-leaf me-1"></i>
+                {% elif value == 'soup' %}
+                  <i class="fas fa-bowl-rice me-1"></i>
+                {% elif value == 'grill' %}
+                  <i class="fas fa-fire me-1"></i>
+                {% elif value == 'noodles' %}
+                  <i class="fas fa-bowl-food me-1"></i>
+                {% elif value == 'sandwich' %}
+                  <i class="fas fa-bread-slice me-1"></i>
+                {% elif value == 'wrap' %}
+                  <i class="fas fa-burrito me-1"></i>
+                {% elif value == 'taco' %}
+                  <i class="fas fa-taco me-1"></i>
+                {% elif value == 'bowl' %}
+                  <i class="fas fa-bowl-food me-1"></i>
+                {% elif value == 'combo' %}
+                  <i class="fas fa-gift me-1"></i>
+                {% elif value == 'breakfast' %}
+                  <i class="fas fa-sun me-1"></i>
+                {% elif value == 'kids' %}
+                  <i class="fas fa-child me-1"></i>
+                {% elif value == 'appetizer' %}
+                  <i class="fas fa-plate-wheat me-1"></i>
+                {% elif value == 'snack' %}
+                  <i class="fas fa-cookie me-1"></i>
+                {% else %}
+                  <i class="fas fa-utensils me-1"></i>
+                {% endif %}
+                {{ label }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  
+
+  <!-- Results Info -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="mb-0">
+            <i class="fas fa-list text-info me-2"></i>
+            {% if menu_items %}
+              Showing {{ menu_items|length }} delicious dish{{ menu_items|length|pluralize:"es" }}
+              {% if category %}in {{ category|title }} category{% endif %}
+            {% else %}
+              No dishes found
+            {% endif %}
+          </h6>
+        </div>
+        {% if menu_items %}
+          <div class="text-muted small">
+            <i class="fas fa-info-circle me-1"></i>
+            Click on any dish to add it to your cart
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Items Grid -->
+  <div class="row">
+    {% for item in menu_items %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100 shadow-sm">
+        {% if item.image %}
+          <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+        {% else %}
+          <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="fas fa-utensils fa-3x text-muted"></i>
+          </div>
+        {% endif %}
+        
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0">{{ item.name }}</h5>
+            <div class="d-flex flex-column align-items-end">
+              <span class="badge bg-primary">{{ item.get_category_display }}</span>
+            </div>
+          </div>
+          
+          <div class="mb-2">
+            <small class="text-muted">
+              <i class="fas fa-store me-1"></i>{{ item.restaurant.name }}
+              <span class="ms-2">
+                <i class="fas fa-star text-warning me-1"></i>{{ item.restaurant.rating }}
+              </span>
+            </small>
+          </div>
+          
+          {% if item.description %}
+            <p class="card-text text-muted small">{{ item.description|truncatewords:15 }}</p>
+          {% endif %}
+          
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="h5 text-primary mb-0">{{ item.price }} €</span>
+                <small class="text-muted d-block">+ {{ item.restaurant.delivery_fee }} € delivery</small>
+              </div>
+              {% if user.is_authenticated %}
+                <a href="{% url 'add-to-cart' menu_item_id=item.id %}" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-plus me-1"></i>Add to Cart
+                </a>
+              {% else %}
+                <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn btn-outline-secondary btn-sm">
+                  <i class="fas fa-sign-in-alt me-1"></i>Login to Order
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No menu items found</h5>
+        <p class="text-muted">Try adjusting your search criteria</p>
+        <a href="{% url 'menu-list' %}" class="btn btn-primary">View All Items</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="Menu pagination">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if cuisine %}&cuisine={{ cuisine }}{% endif %}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if cuisine %}&cuisine={{ cuisine }}{% endif %}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}">Previous</a>
+            </li>
+          {% endif %}
+          
+          <li class="page-item active">
+            <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          </li>
+          
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if cuisine %}&cuisine={{ cuisine }}{% endif %}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if cuisine %}&cuisine={{ cuisine }}{% endif %}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}">Last</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Quick Access to Restaurants -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title">Looking for a specific restaurant?</h6>
+          <p class="card-text text-muted">Browse restaurants by cuisine and location</p>
+          <a href="{% url 'restaurant-list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-store me-1"></i>View All Restaurants
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

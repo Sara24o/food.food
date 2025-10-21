@@ -36,15 +36,23 @@ def _get_cart(session):
 def add_to_cart(request, menu_item_id):
     item = get_object_or_404(MenuItem, id=menu_item_id, is_available=True)
     cart = _get_cart(request.session)
-    # Ensure cart is tied to one restaurant
+    
+    # Check if adding item from different restaurant
     if cart["restaurant_id"] and cart["restaurant_id"] != item.restaurant_id:
         # reset cart if different restaurant
         cart = {"items": {}, "restaurant_id": item.restaurant_id}
+        messages.warning(request, f"Your cart has been cleared. You can only order from one restaurant at a time.")
+    
     if not cart["restaurant_id"]:
         cart["restaurant_id"] = item.restaurant_id
+    
     cart_items = cart["items"]
     cart_items[str(menu_item_id)] = cart_items.get(str(menu_item_id), 0) + 1
     request.session['cart'] = cart
+    
+    # Add success message
+    messages.success(request, f"'{item.name}' has been added to your cart!")
+    
     return redirect('cart-view')
 
 
@@ -67,6 +75,8 @@ def cart_view(request):
     items = []
     subtotal = 0
     restaurant = None
+    suggestions = []
+    
     if cart["items"]:
         ids = [int(k) for k in cart["items"].keys()]
         qs = MenuItem.objects.filter(id__in=ids)
@@ -77,6 +87,14 @@ def cart_view(request):
             items.append({"menu_item": mi, "quantity": qty, "line_total": line_total})
         if cart["restaurant_id"]:
             restaurant = Restaurant.objects.filter(id=cart["restaurant_id"]).first()
+            
+            # Get suggestions: other menu items from the same restaurant
+            # Exclude items already in cart
+            suggestions = MenuItem.objects.filter(
+                restaurant=restaurant,
+                is_available=True
+            ).exclude(id__in=ids).order_by('category', 'name')[:6]  # Limit to 6 suggestions
+    
     delivery_fee = restaurant.delivery_fee if restaurant else 0
     total = subtotal + (delivery_fee or 0)
     return render(request, 'orders/cart.html', {
@@ -85,6 +103,7 @@ def cart_view(request):
         "delivery_fee": delivery_fee,
         "total": total,
         "restaurant": restaurant,
+        "suggestions": suggestions,
     })
 
 

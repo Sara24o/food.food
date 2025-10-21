@@ -9,6 +9,56 @@ def splash_view(request):
     return render(request, 'splash.html')
 
 
+class MenuListView(ListView):
+    """Display all menu items from all restaurants on homepage"""
+    model = MenuItem
+    template_name = 'restaurants/menu_list.html'
+    context_object_name = 'menu_items'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(is_available=True).select_related('restaurant')
+        
+        # Search filters
+        q = self.request.GET.get('q', '').strip()
+        category = self.request.GET.get('category')
+        price_min = self.request.GET.get('price_min')
+        price_max = self.request.GET.get('price_max')
+        
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q)
+                | Q(description__icontains=q)
+                | Q(restaurant__name__icontains=q)
+            )
+        
+        if category:
+            qs = qs.filter(category=category)
+            
+        if price_min:
+            try:
+                qs = qs.filter(price__gte=float(price_min))
+            except ValueError:
+                pass
+                
+        if price_max:
+            try:
+                qs = qs.filter(price__lte=float(price_max))
+            except ValueError:
+                pass
+        
+        return qs.order_by('restaurant__name', 'category', 'name')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['q'] = self.request.GET.get('q', '').strip()
+        ctx['category'] = self.request.GET.get('category', '')
+        ctx['price_min'] = self.request.GET.get('price_min', '')
+        ctx['price_max'] = self.request.GET.get('price_max', '')
+        ctx['categories'] = MenuItem.Category.choices
+        return ctx
+
+
 class RestaurantListView(ListView):
     model = Restaurant
     template_name = 'restaurants/list.html'
@@ -29,8 +79,6 @@ class RestaurantListView(ListView):
                 | Q(menu_items__description__icontains=q)
                 | Q(menu_items__category__icontains=q)
             ).distinct()
-        if cuisine:
-            qs = qs.filter(cuisine_type=cuisine)
         if is_open == '1':
             qs = qs.filter(is_open=True)
         return qs.order_by('-rating', 'name')
@@ -38,9 +86,7 @@ class RestaurantListView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['q'] = self.request.GET.get('q', '').strip()
-        ctx['cuisine'] = self.request.GET.get('cuisine', '')
         ctx['open'] = self.request.GET.get('open', '')
-        ctx['cuisines'] = Restaurant.CuisineType.choices
         return ctx
 
 

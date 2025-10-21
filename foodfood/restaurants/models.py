@@ -53,34 +53,11 @@ def _compress_and_fit_image(image_path: str, target_size=TARGET_IMAGE_SIZE) -> N
 
 
 class Restaurant(models.Model):
-    class CuisineType(TextChoices):
-        AFRICAN = "african", "African"
-        AMERICAN = "american", "American"
-        ASIAN = "asian", "Asian"
-        BBQ = "bbq", "BBQ"
-        BURGER = "burger", "Burger"
-        CHINESE = "chinese", "Chinese"
-        COFFEE = "coffee", "Coffee"
-        DESSERT = "dessert", "Dessert"
-        FRENCH = "french", "French"
-        GREEK = "greek", "Greek"
-        INDIAN = "indian", "Indian"
-        ITALIAN = "italian", "Italian"
-        JAPANESE = "japanese", "Japanese"
-        LEBANESE = "lebanese", "Lebanese"
-        MEXICAN = "mexican", "Mexican"
-        PIZZA = "pizza", "Pizza"
-        SEAFOOD = "seafood", "Seafood"
-        SUSHI = "sushi", "Sushi"
-        THAI = "thai", "Thai"
-        VEGAN = "vegan", "Vegan"
-        VEGETARIAN = "vegetarian", "Vegetarian"
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name="restaurants")
     name = models.CharField(max_length=120)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="restaurants/", blank=True, null=True)
-    cuisine_type = models.CharField(max_length=32, choices=CuisineType.choices, default=CuisineType.ASIAN)
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     delivery_time = models.PositiveIntegerField(help_text="Estimated delivery time in minutes", default=30)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
@@ -110,22 +87,31 @@ class Restaurant(models.Model):
 
 class MenuItem(models.Model):
     class Category(TextChoices):
+        # Catégories principales de plats
         STARTER = "starter", "Starter"
-        MAIN = "main", "Main"
-        SIDE = "side", "Side"
+        MAIN = "main", "Main Course"
+        SIDE = "side", "Side Dish"
         DESSERT = "dessert", "Dessert"
-        DRINK = "drink", "Drink"
-        COMBO = "combo", "Combo"
-        BREAKFAST = "breakfast", "Breakfast"
-        KIDS = "kids", "Kids"
-        SALAD = "salad", "Salad"
-        SOUP = "soup", "Soup"
-        PASTA = "pasta", "Pasta"
+        DRINK = "drink", "Beverage"
+        # Types de plats spécifiques
         PIZZA = "pizza", "Pizza"
         BURGER = "burger", "Burger"
-        GRILL = "grill", "Grill"
         SUSHI = "sushi", "Sushi"
+        PASTA = "pasta", "Pasta"
+        SALAD = "salad", "Salad"
+        SOUP = "soup", "Soup"
+        GRILL = "grill", "Grilled"
         NOODLES = "noodles", "Noodles"
+        SANDWICH = "sandwich", "Sandwich"
+        WRAP = "wrap", "Wrap"
+        TACO = "taco", "Taco"
+        BOWL = "bowl", "Bowl"
+        # Catégories spéciales
+        COMBO = "combo", "Combo Meal"
+        BREAKFAST = "breakfast", "Breakfast"
+        KIDS = "kids", "Kids Menu"
+        APPETIZER = "appetizer", "Appetizer"
+        SNACK = "snack", "Snack"
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="menu_items")
     name = models.CharField(max_length=120)
     description = models.TextField(blank=True)

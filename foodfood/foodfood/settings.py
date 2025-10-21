@@ -140,10 +140,37 @@ CSRF_TRUSTED_ORIGINS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Configuration du logging pour diagnostiquer les problèmes de connexion
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'accounts.views': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.contrib.auth': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 # Auth redirects
 # Use named URLs to avoid NoReverseMatch on empty strings
 LOGIN_REDIRECT_URL = 'smart-redirect'
-LOGOUT_REDIRECT_URL = 'restaurant-list'
+LOGOUT_REDIRECT_URL = 'menu-list'
 
 # Jazzmin configuration (optional tweaks)
 JAZZMIN_SETTINGS = {

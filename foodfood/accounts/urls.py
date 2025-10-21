@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import signup_view, profile_view, smart_redirect, vendor_dashboard, vendor_orders, vendor_menu_management, vendor_add_menu_item, vendor_edit_menu_item
+from .views import signup_view, profile_view, smart_redirect, vendor_dashboard, vendor_orders, vendor_menu_management, vendor_add_menu_item, vendor_edit_menu_item, CustomLoginView
 
 
 urlpatterns = [
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('signup/', signup_view, name='signup'),
     path('profile/', profile_view, name='profile'),
     path('smart-redirect/', smart_redirect, name='smart-redirect'),

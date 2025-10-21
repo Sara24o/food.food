@@ -38,7 +38,7 @@
           <span>{{ r.name }}</span>
           {% if r.is_open %}<span class="badge text-bg-success">Open</span>{% else %}<span class="badge text-bg-secondary">Closed</span>{% endif %}
         </h5>
-        <div class="mb-1 text-muted small">Cuisine: {{ r.get_cuisine_type_display }} · Delivery: {{ r.delivery_time }} min · Fee: {{ r.delivery_fee }} €</div>
+        <div class="mb-1 text-muted small">Delivery: {{ r.delivery_time }} min · Fee: {{ r.delivery_fee }} €</div>
         <p class="card-text">{{ r.description|truncatewords:20 }}</p>
         <a href="{% url 'restaurant-menu' slug=r.slug %}" class="btn btn-primary">View</a>
       </div>
