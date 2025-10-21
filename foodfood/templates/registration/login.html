@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Sign In{% endblock %}
 {% block content %}
 <div class="auth-split">
-  <div class="auth-left d-none d-md-block">
+  <div class="auth-left d-none d-md-block" style="background: url('{% static "images/auth-food.jpg" %}') center/cover no-repeat;">
     <div class="auth-left-content">
-      <h1>Need some<br>Pizza, yo?</h1>
-      <p>C'mon and order from nearby Pizza<br>delivery and pickup restaurants</p>
+
       <div class="auth-pagination">
         <div class="dot active"></div>
         <div class="dot"></div>
@@ -15,7 +15,7 @@
   </div>
   <div class="auth-right">
     <div class="auth-card">
-      <h2 class="text-center mb-4">Welcome!</h2>
+      <h2 class="text-center mb-4">Sign In</h2>
       
       {% if form.errors %}
         <div class="alert alert-danger">
