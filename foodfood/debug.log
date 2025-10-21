@@ -37,51 +37,7 @@ Test d'authentification pour 'test_vendor5'
 Authentification RÉUSSIE pour 'test_vendor5'
 User: test_vendor5, Active: True, Staff: False
 === GET LOGIN PAGE ===
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'jemima'
-Password reçu: *********
-Utilisateur trouvé: jemima, Active: True
-Test d'authentification pour 'jemima'
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'jemima'
-Password reçu: *********
-Utilisateur trouvé: jemima, Active: True
-Test d'authentification pour 'jemima'
-Authentification RÉUSSIE pour 'jemima'
-User: jemima, Active: True, Staff: True
-Authentification RÉUSSIE pour 'jemima'
-User: jemima, Active: True, Staff: True
 === GET LOGIN PAGE ===
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'test_customer5'
-Password reçu: ***********
-Utilisateur trouvé: test_customer5, Active: True
-Test d'authentification pour 'test_customer5'
-Authentification RÉUSSIE pour 'test_customer5'
-User: test_customer5, Active: True, Staff: False
 === GET LOGIN PAGE ===
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'test_vendor5'
-Password reçu: ***********
-Utilisateur trouvé: test_vendor5, Active: True
-Test d'authentification pour 'test_vendor5'
-Authentification RÉUSSIE pour 'test_vendor5'
-User: test_vendor5, Active: True, Staff: False
-=== GET LOGIN PAGE ===
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'test_customer5'
-Password reçu: ***********
-Utilisateur trouvé: test_customer5, Active: True
-Test d'authentification pour 'test_customer5'
-Authentification RÉUSSIE pour 'test_customer5'
-User: test_customer5, Active: True, Staff: False
-=== GET LOGIN PAGE ===
-=== TENTATIVE DE CONNEXION ===
-Username reçu: 'test_vendor5'
-Password reçu: ***********
-Utilisateur trouvé: test_vendor5, Active: True
-Test d'authentification pour 'test_vendor5'
-Authentification RÉUSSIE pour 'test_vendor5'
-User: test_vendor5, Active: True, Staff: False
 === GET LOGIN PAGE ===
 === GET LOGIN PAGE ===
