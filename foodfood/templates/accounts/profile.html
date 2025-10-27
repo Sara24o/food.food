@@ -1,39 +1,134 @@
 {% extends 'base.html' %}
-{% block title %}Mon profil{% endblock %}
+{% block title %}My Profile{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <h1 class="mb-3">Mon profil</h1>
-    <form method="post" class="card card-body shadow-sm profile-form">
-      {% csrf_token %}
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Prénom</label>
-          <input type="text" name="first_name" value="{{ form.first_name.value }}" class="form-control" />
+<style>
+  body {
+    background: #f8f9fa;
+    min-height: 100vh;
+    padding: 40px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .profile-form {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  h1 {
+    color: #333;
+    font-weight: 700;
+  }
+  .form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  .form-control, .form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+  textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+  }
+</style>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-3">My Profile</h1>
+      
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      
+      <form method="post" class="card card-body shadow-sm profile-form" onsubmit="handleSubmit(event)">
+        {% csrf_token %}
+        
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">First Name</label>
+            <input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}" class="form-control" placeholder="Your first name" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Last Name</label>
+            <input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}" class="form-control" placeholder="Your last name" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" value="{{ form.email.value|default:'' }}" class="form-control" placeholder="your.email@example.com" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+            <input type="tel" name="phone" value="{{ form.phone.value|default:'' }}" class="form-control" placeholder="Your phone number" required />
+            {% if form.phone.errors %}
+              <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Address</label>
+            <input type="text" name="address" value="{{ form.address.value|default:'' }}" class="form-control" placeholder="Your address" />
+            {% if form.address.errors %}
+              <div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Preferences</label>
+            <textarea name="preferences" class="form-control" placeholder="Your preferences...">{{ form.preferences.value|default:'' }}</textarea>
+            {% if form.preferences.errors %}
+              <div class="text-danger small mt-1">{{ form.preferences.errors.0 }}</div>
+            {% endif %}
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Nom</label>
-          <input type="text" name="last_name" value="{{ form.last_name.value }}" class="form-control" />
-        </div>
-        <div class="col-md-12">
-          <label class="form-label">Email</label>
-          <input type="email" name="email" value="{{ form.email.value }}" class="form-control" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Téléphone</label>
-          {{ form.phone }}
-        </div>
-        <div class="col-md-8">
-          <label class="form-label">Adresse</label>
-          {{ form.address }}
-        </div>
-        <div class="col-md-12">
-          <label class="form-label">Préférences</label>
-          {{ form.preferences }}
-        </div>
-      </div>
-      <button class="btn btn-primary w-100 mt-3">Enregistrer</button>
-    </form>
+        
+        <button type="submit" class="btn btn-success w-100 mt-3">Save Changes</button>
+      </form>
+    </div>
   </div>
 </div>
+
+<script>
+  function handleSubmit(event) {
+    // Ne pas empêcher l'envoi réel du formulaire Django
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+    
+    // Re-enable after 3 seconds (in case of slow response)
+    setTimeout(() => {
+      btn.textContent = '✓ Saved!';
+      btn.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+      }, 2000);
+    }, 1000);
+  }
+</script>
 {% endblock %}
