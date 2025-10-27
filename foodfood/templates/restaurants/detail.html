@@ -8,7 +8,7 @@
 {% if restaurant.image %}
 <img src="{{ restaurant.image.url }}" class="img-fixed-hero rounded mb-3" alt="{{ restaurant.name }}">
 {% endif %}
-<div class="text-muted mb-2">Delivery: {{ restaurant.delivery_time }} min · Fee: {{ restaurant.delivery_fee }} €</div>
+<div class="text-muted mb-2">Delivery: {{ restaurant.delivery_time }} min · Fee: ₹{{ restaurant.delivery_fee }}</div>
 <p>{{ restaurant.description }}</p>
 <a href="{% url 'restaurant-menu' slug=restaurant.slug %}" class="btn btn-secondary">View Menu</a>
 {% endblock %}

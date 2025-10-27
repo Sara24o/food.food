@@ -12,7 +12,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ item.name }}</h5>
         <p class="card-text">{{ item.description|truncatewords:20 }}</p>
-        <p class="card-text fw-bold"><span class="price-badge">{{ item.price }} €</span></p>
+        <p class="card-text fw-bold"><span class="price-badge">₹{{ item.price }}</span></p>
         <a href="/orders/add/{{ item.id }}/" class="btn btn-success" data-add-to-cart>Add to Cart</a>
       </div>
     </div>

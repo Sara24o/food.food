@@ -59,8 +59,8 @@
                     <td>
                       <span class="badge bg-primary">{{ row.quantity }}</span>
                     </td>
-                    <td>{{ row.menu_item.price }} €</td>
-                    <td><strong>{{ row.line_total }} €</strong></td>
+                    <td>₹{{ row.menu_item.price }}</td>
+                    <td><strong>₹{{ row.line_total }}</strong></td>
                     <td>
                       <div class="btn-group btn-group-sm">
                         <a href="/orders/remove/{{ row.menu_item.id }}/" class="btn btn-outline-danger">
@@ -97,16 +97,16 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-2">
             <span>Subtotal:</span>
-            <span><strong>{{ subtotal }} €</strong></span>
+            <span><strong>₹{{ subtotal }}</strong></span>
           </div>
           <div class="d-flex justify-content-between mb-2">
             <span>Delivery Fee:</span>
-            <span><strong>{{ delivery_fee }} €</strong></span>
+            <span><strong>₹{{ delivery_fee }}</strong></span>
           </div>
           <hr>
           <div class="d-flex justify-content-between mb-3">
             <span class="h5">Total:</span>
-            <span class="h5 text-primary"><strong>{{ total }} €</strong></span>
+            <span class="h5 text-primary"><strong>₹{{ total }}</strong></span>
           </div>
           
           <form method="post" action="/orders/checkout/" class="d-grid gap-2">
@@ -159,7 +159,7 @@
                   <div class="mt-auto">
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
-                        <span class="h6 text-primary">{{ item.price }} €</span>
+                        <span class="h6 text-primary">₹{{ item.price }}</span>
                       </div>
                       <a href="{% url 'add-to-cart' menu_item_id=item.id %}" class="btn btn-outline-primary btn-sm">
                         <i class="fas fa-plus me-1"></i> Add
