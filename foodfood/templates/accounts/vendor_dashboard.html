@@ -30,10 +30,10 @@
           <div class="d-flex justify-content-between">
             <div>
               <h6 class="card-title text-white-50">Today's Revenue</h6>
-              <h3 class="mb-0">{{ revenue_today|floatformat:2 }} €</h3>
+              <h3 class="mb-0">₹{{ revenue_today|floatformat:2 }}</h3>
             </div>
             <div class="align-self-center">
-              <i class="fas fa-euro-sign fa-2x opacity-75"></i>
+              <i class="fas fa-rupee-sign fa-2x opacity-75"></i>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
           <div class="d-flex justify-content-between">
             <div>
               <h6 class="card-title text-white-50">Avg Order Value</h6>
-              <h3 class="mb-0">{{ avg_order_value_today|floatformat:2 }} €</h3>
+              <h3 class="mb-0">₹{{ avg_order_value_today|floatformat:2 }}</h3>
             </div>
             <div class="align-self-center">
               <i class="fas fa-chart-bar fa-2x opacity-75"></i>
@@ -104,18 +104,18 @@
             <div class="col-4">
               <div class="border-end">
                 <h6 class="text-muted">Today</h6>
-                <h4 class="text-primary">{{ revenue_today|floatformat:2 }} €</h4>
+                <h4 class="text-primary">₹{{ revenue_today|floatformat:2 }}</h4>
               </div>
             </div>
             <div class="col-4">
               <div class="border-end">
                 <h6 class="text-muted">This Week</h6>
-                <h4 class="text-success">{{ revenue_week|floatformat:2 }} €</h4>
+                <h4 class="text-success">₹{{ revenue_week|floatformat:2 }}</h4>
               </div>
             </div>
             <div class="col-4">
               <h6 class="text-muted">This Month</h6>
-              <h4 class="text-info">{{ revenue_month|floatformat:2 }} €</h4>
+              <h4 class="text-info">₹{{ revenue_month|floatformat:2 }}</h4>
             </div>
           </div>
         </div>
@@ -196,7 +196,7 @@
                       <br><small class="text-muted">Total: {{ stats.total_orders }}</small>
                     </td>
                     <td>
-                      <strong>{{ stats.revenue_this_month|floatformat:2 }} €</strong>
+                      <strong>₹{{ stats.revenue_this_month|floatformat:2 }}</strong>
                     </td>
                     <td>
                       <div class="d-flex align-items-center">
@@ -250,7 +250,7 @@
                 </div>
                 <div class="text-end">
                   <span class="badge bg-primary">{{ item.total_quantity }} sold</span>
-                  <br><small class="text-success">{{ item.total_revenue|floatformat:2 }} €</small>
+                  <br><small class="text-success">₹{{ item.total_revenue|floatformat:2 }}</small>
                 </div>
               </div>
               {% endfor %}
@@ -286,7 +286,7 @@
                   <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'pending' %}bg-warning{% else %}bg-secondary{% endif %}">
                     {{ order.status|title }}
                   </span>
-                  <br><small class="text-primary">{{ order.total_amount|floatformat:2 }} €</small>
+                  <br><small class="text-primary">₹{{ order.total_amount|floatformat:2 }}</small>
                 </div>
               </div>
               {% endfor %}
@@ -321,7 +321,7 @@
                   <div class="card-body py-2">
                     <small class="text-muted">{{ day.date|date:"D" }}</small>
                     <br><strong class="{% if day.orders > 0 %}text-primary{% else %}text-muted{% endif %}">{{ day.orders }}</strong>
-                    <br><small class="text-success">{{ day.revenue|floatformat:0 }}€</small>
+                    <br><small class="text-success">₹{{ day.revenue|floatformat:0 }}</small>
                   </div>
                 </div>
               </div>
